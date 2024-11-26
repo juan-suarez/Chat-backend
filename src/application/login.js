@@ -6,7 +6,7 @@ export const login = async (email, password) => {
   console.log(email, password)
   try {
     const result = await db.execute({
-      sql: `SELECT id, first_name, last_name, age, email, password 
+      sql: `SELECT id, first_name, last_name, age, email, password, role
             FROM users 
             WHERE email = (:email)`,
       args: { email }
@@ -27,6 +27,7 @@ export const login = async (email, password) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        role: user.role
       },
       process.env.SECRET_KEY,
       {

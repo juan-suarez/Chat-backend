@@ -11,6 +11,7 @@ export const initDbUsers = async () => {
         age INTEGER NOT NULL,
         email text UNIQUE NOT NULL,
         password TEXT NOT NULL,
+        role TEXT DEFAULT "student" NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);

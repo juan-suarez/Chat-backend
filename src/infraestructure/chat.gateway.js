@@ -15,14 +15,14 @@ export const handleWebSocket = (server) => {
 
     socket.on('chat-message', async (message) => {
       let result;
-
+      const completeMessage = `${socket.handshake.auth.username + (socket.handshake.auth.role === "admin"? "(Admin)":"")}: ${message}`
       try {
-        result = await createMessage(message, socket.handshake.auth.username);
+        result = await createMessage(completeMessage, socket.handshake.auth.username);
       } catch (err) {
         console.log(err);
       }
 
-      io.emit('chat-message', `${socket.handshake.auth.username}: ${message}`, result.lastInsertRowid.toString());
+      io.emit('chat-message', completeMessage, result.lastInsertRowid.toString());
     });
 
     if (!socket.recovered) {
@@ -30,7 +30,7 @@ export const handleWebSocket = (server) => {
         const messages = await getMessages(socket.handshake.auth.serverOffset ?? 0);
 
         messages.forEach((row) => {
-          socket.emit('chat-message', `${row.user}: ${row.content}`, row.id.toString());
+          socket.emit('chat-message', row.content, row.id.toString());
         });
       } catch (err) {
         console.error(err);
