@@ -22,6 +22,7 @@ export const initDbUsers = async () => {
 export const createUser = async (first_name, last_name, age, email, password) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await db.execute({
       sql: `INSERT INTO users (first_name, last_name, age, email, password) 
             VALUES(:first_name, :last_name, :age, :email, :password)`,
@@ -30,7 +31,7 @@ export const createUser = async (first_name, last_name, age, email, password) =>
     
     return result.id;
   } catch (error) {
-
+    console.log(error)
     if (error.message.includes('UNIQUE constraint failed: users.email')) {
       throw new Error ('El correo electrónico ya está registrado');
     }

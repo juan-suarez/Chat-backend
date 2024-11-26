@@ -4,16 +4,18 @@ import { login } from '../application/login.js';
 const router = express.Router();
 
 router.post('/login', async(req, res) => {
-  const { email, password} = req;
+  const { email, password} = req.body;
   try{
     const token = await login(email, password);
 
     res
     .cookie('access_token', token, {
-      httpOnly: true,
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60
     })
-    .send('login succesfully')
+    .send({message: 'login succesfully'})
 
   }catch(error){
     res.status(401).send(error.message)
@@ -21,7 +23,8 @@ router.post('/login', async(req, res) => {
 });
 
 router.post('/sign-up', async (req, res) => {
-  const {first_name, last_name, password, email, age} = req.body;
+  console.log(req.body)
+  const {firstName: first_name, lastName: last_name, password, email, age} = req.body;
 
   try {
     const id = await createUser(first_name, last_name, age, email, password);

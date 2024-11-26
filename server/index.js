@@ -6,6 +6,7 @@ import { handleWebSocket } from '../src/infraestructure/chat.gateway.js';
 import { initDb } from '../src/infraestructure/dbConfig.js';
 import cookieParser from 'cookie-parser';
 import { authenticateToken } from '../src/infraestructure/authMiddleware.js';
+import cors from 'cors'
 
 dotenv.config();
 const port = process.env.PORT ?? 3000;
@@ -13,6 +14,14 @@ const port = process.env.PORT ?? 3000;
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+const corsOptions = {
+  origin: 'http://localhost:3001',  
+  credentials: true,  
+  allowedHeaders: ['Content-Type'],  
+};
+
+app.use(cors(corsOptions));
 
 initDb();
 

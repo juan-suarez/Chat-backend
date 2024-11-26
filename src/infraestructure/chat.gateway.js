@@ -22,7 +22,7 @@ export const handleWebSocket = (server) => {
         console.log(err);
       }
 
-      io.emit('chat-message', `User: ${message}`, result.lastInsertRowid.toString());
+      io.emit('chat-message', `${socket.handshake.auth.username}: ${message}`, result.lastInsertRowid.toString());
     });
 
     if (!socket.recovered) {

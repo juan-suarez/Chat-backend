@@ -3,14 +3,14 @@ import { db } from "../infraestructure/dbConfig.js";
 import jwt from 'jsonwebtoken'
 
 export const login = async (email, password) => {
+  console.log(email, password)
   try {
     const result = await db.execute({
       sql: `SELECT id, first_name, last_name, age, email, password 
             FROM users 
-            WHERE email = :email`,
+            WHERE email = (:email)`,
       args: { email }
     });
-
     const user = result.rows[0];
     if (!user) {
       throw new Error('Correo electrónico no registrado');
@@ -33,9 +33,8 @@ export const login = async (email, password) => {
         expiresIn: '1h'
       }
     )
-
-    return { token };
-
+    console.log(token)
+    return token;
   } catch (error) {
     console.error('Error en el inicio de sesión:', error);
     throw new Error('Error en el inicio de sesión');
